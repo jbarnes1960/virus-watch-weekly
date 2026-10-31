@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 3 (2026-09-28)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 3." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 3</span>
+        <span>2026-09-28</span>
+        <span>Week of Sep 22–28, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #3. Research for this issue was pulled from public reporting on Monday, Sep 28, 2026 (America/Denver). This week’s theme is malware that leans on AI — for deciding what to do after it infects a PC, for remote phone control, and for running commands on hijacked servers — plus a ClickFix stealer that blinds security tools with a vulnerable AMD driver, a fresh Oracle PeopleSoft extortion wave using the SideEye backdoor, and a new ransomware crew that threatens to wipe backups.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>ClosedQuorum: Windows malware that lets AI models vote on the next attack move</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">CLOSEDQUORUM (aka ClosedQuorum)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Researchers found a new Windows program that, after it lands on a PC, asks several public AI chat services what to do next — steal passwords, hide inside another program, or stick around after reboot — then follows the majority vote with no human typing commands. Stolen logins and crypto-wallet files can be sent to the criminals over Discord. You are unlikely to see this tomorrow in every inbox, but it shows attackers are starting to automate the “what should I do on this computer?” step. Keep devices patched, use a password manager with unique passwords, and treat unexpected installers as untrusted.</p></div>
+  <p>Cisco Talos (Sep 22), discovered via its CAIRN toolkit and covered by BleepingComputer, describes CLOSEDQUORUM as a Go-based Windows implant that delegates post-compromise tactical decisions to a panel of commercial LLMs (DeepSeek, Qwen, Mistral, Google Gemini). Models vote among constrained actions (steal, inject, persist, move); ties prefer DeepSeek. The steal path runs LSASS dumping, Chromium/Firefox credential theft, and MetaMask/Exodus/Ethereum wallet extraction; inject uses process hollowing or Early Bird APC; persist includes Run key, scheduled task, and WMI. Results go to an operator Discord webhook (AES-256-GCM, date-derived key). Talos has not confirmed broad in-the-wild deployment; public builds use placeholder API keys/webhook. Talos frames it as the first publicly documented Windows implant to use multi-model LLM voting as C2-style tasking.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Operator-delivered custom builds (distribution model assessed as credentials-as-a-service); delivery vector for victims not publicly confirmed in-the-wild</div>
+  </div>
+  <div class="story-source">Source: <a href="https://blog.talosintelligence.com/the-closed-quorum-inside-the-first-reported-autonomous-ai-c2-implant/" rel="noopener noreferrer" target="_blank">Cisco Talos / BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>RemControl: Android banking malware sold as a service, fake TVTap app ads</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">RemControl (operator tracked as UNKK; possible Medusa banking-trojan link)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Fake ads and lookalike Google Play pages for a TV streaming app trick people into installing RemControl on Android phones. Once you grant the Accessibility permission it asks for, it can put fake bank login screens over real apps, watch your screen, and steal PINs and one-time codes. Stick to the real Google Play store, decline Accessibility access for apps that don’t need it for real accessibility help, and keep Play Protect on.</p></div>
+  <p>BleepingComputer (Sep 23) covering Group-IB research: RemControl is a new Android malware-as-a-service active since at least May 2026 (samples from July) delivered via malvertising impersonating the TVTap IPTV app, including geofenced Italian campaigns and Meta Pixel tracking suggestive of Meta ad abuse. A VPN-style service blocks Google Play traffic to hinder Play Protect. With Accessibility granted it shows full-screen banking phishing overlays, streams the UI tree/screenshots, records input, performs remote gestures, captures pattern-lock coordinates across major OEMs, and blocks uninstall/factory-reset paths. Encrypted C2 material is pulled from Telegram; exposed FastAPI docs on a C2 proxy revealed overlay/credential endpoints. Targets include Europe (Italy, France, Spain, Poland, Portugal), Canada, and Middle East markets. Russian-language overlay HTML and a shared identifier lead Group-IB to track the operator as UNKK with a suspected Medusa banking-trojan connection.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Android</div>
+    <div><strong>How it spreads:</strong> Malvertising / fake Google Play pages (TVTap IPTV lure) → sideloaded APK → Accessibility abuse</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/new-remcontrol-android-banking-malware-targets-users-in-europe-and-canada/" rel="noopener noreferrer" target="_blank">BleepingComputer / Group-IB</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Carbonato: worm-like malware hijacks open Docker servers with an AI agent</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Carbonato (Hermes Agent persona GH0ST)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Servers that leave Docker’s remote control open to the internet without a password are being taken over by malware called Carbonato. It spreads like a worm to other open Docker hosts, sets up secret remote access, and installs an AI helper that can run commands and hunt for passwords and API keys when the criminals ask over Telegram. If you run Docker at home or work: never expose the Docker API (port 2375) to the public internet, and require login on any registry you use.</p></div>
+  <p>BleepingComputer (Sep 24) covering ThreatDown (Malwarebytes) research: Carbonato targets Docker daemons with unauthenticated API on port 2375, launches a privileged container, opens reverse SSH with operator keys, reports via Telegram, and persists via cron, systemd timers, rc.local, and OpenRC. It installs the Hermes Agent framework with a GH0ST persona (overwriting SOUL.md); Hermes interprets Telegram tasks, writes/runs shell commands, and returns results (AI API keys, SSH credentials, tokens). Worm-like scanners every five minutes pull the implant from an unauthenticated Docker registry (~60 repos, 4.3 GB observed). Evidence spans Oct 2024–Aug 2026; possible Costa Rica operator nexus; IoCs include GH0ST persona, CARBONATO_API_KEY, Telegram traffic, reverse SSH toward AS262145.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Linux Docker hosts (exposed daemon API)</div>
+    <div><strong>How it spreads:</strong> Unauthenticated Docker API (port 2375) → privileged container → worm scan of adjacent networks</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/new-carbonato-malware-uses-ai-agents-to-hijack-exposed-docker-hosts/" rel="noopener noreferrer" target="_blank">BleepingComputer / ThreatDown (Malwarebytes)</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Lunex / Psychedelic Stealer: fake Cloudflare ClickFix + AMD driver blinds security tools</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">LunexStealer (aka Psychedelic Stealer) on the Lunex MaaS platform</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Hackers broke into ordinary websites and added a fake “Cloudflare security check” that tells visitors to paste a Windows install command. That installs a password stealer sold as Lunex. Before it steals browser logins and crypto wallets, it loads a buggy AMD driver so security software keeps running but can’t see clearly. Never paste “verification” commands from a webpage into Run or PowerShell — close the tab and open the real site yourself.</p></div>
+  <p>Ontinue (Sep 24) with The Hacker News follow-up (Sep 26) and earlier Arctic Wolf Labs ClickFix reporting: Ukrainian-speaking users hit via compromised legitimate sites injecting fake Cloudflare CAPTCHA / ClickFix that launches msiexec for a malicious MSI. LunexLoader escalates via CMSTPLUA COM (UAC bypass), loads AMD Radeon PDFWKRNL.sys (CVE-2023-20598) for BYOVD kernel-callback zeroing against a ~20-driver security hit list (leaves EDR processes running but blind), then deploys LunexStealer (psychedeliclove.exe). Stealer hits seven Chromium browsers, five desktop and four extension wallets; persists via Run key, hidden task psychedelicloveUtils, and a Chrome/Edge Native Messaging Host (com.lunex.explorer) backed by embedded PowerShell that survives binary deletion. Ontinue mapped 28 Lunex panels across 13 countries (up from six in June); Russian-language panel UI; financially motivated CIS-aligned MaaS assessment.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Compromised websites → fake Cloudflare ClickFix → malicious MSI → LunexLoader BYOVD → LunexStealer</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.ontinue.com/resource/lunex-unmasked-a-new-information-stealer-deployed-through-byovd/" rel="noopener noreferrer" target="_blank">Ontinue / The Hacker News</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ShinyHunters: new PeopleSoft mass-exploitation wave drops SideEye backdoor</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">SideEye backdoor (+ JSP web shells; UNC6240 / ShinyHunters)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Google and Mandiant say the ShinyHunters extortion crew is again breaking into companies that run Oracle PeopleSoft by slipping past some firewall rules with a small URL trick. After getting in, they plant remote-control tools — including a Windows backdoor called SideEye that can steal passwords and open a secret remote channel — then steal data and threaten to leak it. Big companies using PeopleSoft should apply Oracle’s fix for CVE-2026-35273, check for odd web shells, and prepare for ransom emails if something looks wrong.</p></div>
+  <p>SecurityWeek (Sep 28) reporting Mandiant / Google Threat Intelligence (UNC6240 / ShinyHunters): a new mass-exploitation wave against Oracle PeopleSoft CVE-2026-35273 uses URL-encoded ‘%50’ in /PSEMHUB paths to bypass WAF/reverse-proxy rules that match literal paths before decoding. Campaign expanded beyond education into agriculture, government, healthcare, IT, technology, and transportation. Persistence via complementary single-line JSP web shells; SideEye backdoor on Windows for browser/app credential theft, file/process management, reverse shell and reverse proxy; Neo-reGeorg for tunneling and MeshCentral for remote management. Actors abuse PeopleSoft/WebLogic service accounts for app data, configs, and DB connection strings. Pattern remains data-theft extortion via leak site. Prior June wave hit 100+ customers (e.g. University of Nottingham, NAIC, Nissan).</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Oracle PeopleSoft / WebLogic environments; Windows servers (SideEye)</div>
+    <div><strong>How it spreads:</strong> Unauthenticated RCE via CVE-2026-35273 (WAF-bypass encoding) → web shells → SideEye / tunneling tools → data theft extortion</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.securityweek.com/google-warns-of-shinyhunters-fresh-oracle-peoplesoft-campaign/" rel="noopener noreferrer" target="_blank">SecurityWeek / Mandiant &amp; Google Threat Intelligence</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>n0n ransomware: new gang threatens to destroy backups if you don’t pay</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">n0n</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A new ransomware group calling itself n0n showed up mid-September and quickly listed more than a dozen alleged victims. Besides stealing files, they claim they will encrypt or wipe backups so the company cannot recover without paying. They often start with stolen employee passwords. Businesses should use phishing-resistant MFA, keep backups offline or immutable, and watch for odd admin logins.</p></div>
+  <p>Infosecurity Magazine (Sep 24) summarizing CyberXTron research: n0n first observed Sep 18, 2026; by Sep 22 its Tor leak site listed 13+ victims across ~10 countries (US heavy; also Vietnam, Uzbekistan, Brazil, Sweden, Luxembourg). Double extortion plus explicit threats to encrypt/destroy backups and shadow copies. Sector mix led by financial services (~23%), then technology, retail, and education (~15% each), plus healthcare, defense, and professional services. Initial access assessed as compromised credentials from third-party infostealers, then privilege escalation and admin tooling for staging. Several countdown timers already expired with data published, suggesting some non-payment. Recommended controls: MFA on external access, restrict VPN/RDP exposure, least privilege, segmentation, monitor lateral movement, isolate backups.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Enterprise Windows networks (credential-driven; specifics of encryptor vary by affiliate reporting)</div>
+    <div><strong>How it spreads:</strong> Stolen infostealer credentials → privilege escalation / admin tools → data theft + backup-destruction threats + leak site</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.infosecurity-magazine.com/news/ransomware-gang-uses-backup/" rel="noopener noreferrer" target="_blank">Infosecurity Magazine / CyberXTron</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>CISA updated JetBrains TeamCity CVE-2026-63077 in KEV around Sep 24 to flag ransomware-gang exploitation (critical auth bypass patched in July; ~160 internet-exposed unpatched hosts per Shadowserver, down from ~700).</li>
+<li>CISA Sep 27 alert: Citrix NetScaler ADC/Gateway zero-days CVE-2026-88771 and CVE-2026-88772 added to KEV with confirmed global exploitation — patch and hunt IoCs before/while updating.</li>
+<li>AI-assisted malware is the through-line this week: ClosedQuorum’s multi-LLM vote, RemControl overlays with AI fingerprints, and Carbonato’s Hermes/GH0ST agent loop.</li>
+<li>ClickFix still pays for criminals: Lunex/Psychedelic’s fake Cloudflare paste-command lure continues the pattern from Issue #2’s ChainScript and PasteSwitch stories.</li>
+<li>New recurring sources worth watching: Cisco Talos CAIRN AI-malware series, Ontinue CDC binary write-ups, Group-IB RemControl notes, ThreatDown Docker/Hermes tracking, Mandiant/GTIG UNC6240 PeopleSoft alerts.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary outlets this week: Cisco Talos (CLOSEDQUORUM, Sep 22) + BleepingComputer; Group-IB via BleepingComputer (RemControl, Sep 23); ThreatDown/Malwarebytes via BleepingComputer (Carbonato, Sep 24); Ontinue CDC (Lunex/Psychedelic BYOVD, Sep 24) + The Hacker News (Sep 26) and Arctic Wolf ClickFix context; Mandiant/Google TI via SecurityWeek (ShinyHunters/SideEye PeopleSoft, Sep 28); CyberXTron via Infosecurity Magazine (n0n ransomware, Sep 24). Also scanned CISA KEV/TeamCity ransomware flag (Sep 24), CISA Citrix NetScaler alert (Sep 27), and vendor blogs from ESET/Sophos/Huntress for non-duplicates vs Issue #2.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-09-21.html">2026-09-21</a></li>
+<li><a href="2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 3 · 2026-09-28</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>

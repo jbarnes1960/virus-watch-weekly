@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 2 (2026-09-21)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 2." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 2</span>
+        <span>2026-09-21</span>
+        <span>Week of Sep 15–21, 2026</span>
+        <span>5 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #2. Research for this issue was pulled from public reporting on Monday, Sep 21, 2026 (America/Denver). This week brought encryptionless ransomware via hijacked Active Directory rules, a new ClickFix-delivered RAT that hides its C2 on a blockchain, a sneaky npm supply-chain campaign, a hijacked entertainment brand used for malvertising, and a government advisory on Iranian spyware aimed at activists and journalists.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>PAYLOAD ransomware: hijack the office network rules, skip the encryptor</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">PAYLOAD (GPO-based encryptionless extortion + ESXi/Linux encryptor)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Attackers who already had admin-level access to a company network created a fake &quot;company policy&quot; that hit every Windows PC at once. Desktops showed ransom messages, wallpapers changed, and local admin accounts were turned off — without locking personal files with the usual ransomware encryptor. Stolen company data was leaked on the dark web. For businesses: lock down domain-admin accounts with phishing-resistant MFA, and alert whenever a new policy is linked at the top of the domain.</p></div>
+  <p>Kaspersky GERT (published Sep 21) detailed an April 2026 incident at a Middle East manufacturing firm. After obtaining domain-admin-equivalent access (likely via phishing and VPN/remote login that looked like legitimate IT), operators authored a malicious Active Directory Group Policy Object named PAYLOAD, linked at the domain root (GUID {C897F2C7-C2AC-4E6F-BF48-58036FF29E79}). Through that single GPO they delivered ransom notes, hijacked desktop wallpaper and lock screens, enforced a logon banner, and disabled the local Administrator account across domain-joined Windows workstations — without deploying a Windows encryptor or encrypting workstation files. A separate &quot;win Firewall Off&quot; GPO disabled Windows Firewall. An ESXi/Linux PAYLOAD encryptor was found on Linux servers; data exfiltration from file servers was later published on the dark web. Impact often appeared after reboot when cached policies applied. Kaspersky frames this as part of a broader &quot;encryptionless extortion&quot; trend.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows domain-joined workstations (GPO disruption); ESXi/Linux servers (encryptor observed)</div>
+    <div><strong>How it spreads:</strong> Compromised privileged AD credentials → malicious domain-root GPO + optional ESXi/Linux PAYLOAD encryptor; data theft for leak-site pressure</div>
+  </div>
+  <div class="story-source">Source: <a href="https://securelist.com/tr/payload-ransomware-via-group-policy/121335/" rel="noopener noreferrer" target="_blank">Kaspersky Securelist / press</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ChainScript RAT: ClickFix fake Spotify installers + Polygon C2 rotation</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">ChainScript (aka ComponentTask33 / UpdateDigital / HostShared / OrchidViolet66)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Fake &quot;fix your Spotify/Zoom/Teams&quot; web pages trick people into running an installer that secretly installs remote-control malware. Once on the PC, criminals can run commands, take screenshots, dig through crypto wallets, and stay connected even if their servers move. Never paste commands from a website into Run, PowerShell, or Terminal, and only install apps from official stores or vendor sites.</p></div>
+  <p>The Hacker News (Sep 21) covering Blackpoint Adversary Pursuit Group research describes a previously undocumented JavaScript RAT delivered via ClickFix-style lures. Victims are steered to download a malicious Windows MSI (e.g. ComponentTask33-…msi) disguised as Spotify; msiexec installs a Node.js runtime and launches the ChainScript agent through hidden PowerShell and VBScript stages under %LOCALAPPDATA% paths that look Microsoft-related. Persistence uses a scheduled task with a Registry Run key fallback. The implant speaks WebSockets to C2 and supports interactive CMD/PowerShell, file ops, screenshots, payload deployment, crypto wallet enumeration (desktop apps and browser extensions), remote JS execution, self-update, and self-removal. C2 discovery uses an EtherHiding-style Polygon smart contract so operators can rotate WebSocket backends without rebuilding the implant.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> ClickFix social engineering → malicious MSI (fake Spotify/Zoom/Teams) → Node.js agent</div>
+  </div>
+  <div class="story-source">Source: <a href="https://thehackernews.com/2026/09/clickfix-lures-deploy-chainscript-rat.html" rel="noopener noreferrer" target="_blank">The Hacker News / Blackpoint</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Malicious npm packages hide loaders in normal library code</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">indexed-btree (+ 9 related npm packages)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Fake coding libraries on npm looked legitimate and skipped the usual &quot;install script&quot; traps, so security tools that only watch installs missed them. The bad code woke up later when the app used the library, then phoned home with machine details. Developers who used indexed-btree or the related packages should rotate secrets and rebuild from clean backups — and not trust install-time scans alone.</p></div>
+  <p>BleepingComputer (Sep 20) reported Checkmarx findings on an npm campaign centered on indexed-btree, a typosquat-style lookalike of sorted-btree that reached ~2 million weekly downloads. The package avoids preinstall/install/postinstall scripts (bypassing npm v12 lifecycle-script approvals) and instead hides a loader inside BTree.prototype.set(), which fires at runtime when called with a specific key and loads obfuscated sharedLoad.min.js. Post-execution behavior includes collecting host details (arch, hostname, CPU, memory, uptime), exfiltrating via hardcoded Slack and Telegram channels, and polling an Ethereum Sepolia smart contract for C2 / second-stage payload material (X25519 → AES). Operators can wipe traces by deleting files and removing the malicious trigger. Nine additional related packages (including btree-core with ~1.95M downloads) were removed from npm; attackers maintained fabricated GitHub histories to look legitimate.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Node.js / developer workstations and CI environments</div>
+    <div><strong>How it spreads:</strong> npm dependency confusion / impersonation → runtime method trigger (not install scripts)</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/malicious-npm-packages-evade-install-script-defenses-at-runtime/" rel="noopener noreferrer" target="_blank">BleepingComputer / Checkmarx</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>PasteSwitch: hijacked HBO Max Reddit ads push ClickFix stealers</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">PasteSwitch (MacSync, AMOS, Amatera, AnimateClipper, ZigClipper)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals took over HBO Max’s verified Reddit account and ran about 108 fake ads in two days. The ads sent people to lookalike download pages that told them to paste a &quot;fix&quot; command into Terminal (Mac) or Run/PowerShell (Windows) — which installed password- and wallet-stealing malware. Verified badges don’t mean an ad is safe; open the real HBO Max or vendor site yourself, and never paste commands from an ad.</p></div>
+  <p>Malwarebytes (Sep 15) summarizing Hudson Rock and ADAMnetworks research: attackers compromised the verified u/hbomax Reddit account and served ~108 malicious ads over ~48 hours in mid-September. Ads promoted fake AI tools, developer software, and macOS utilities, plus HBO Max lookalike download sites. Pages used ClickFix prompts to get victims to paste commands into macOS Terminal or Windows Run/PowerShell. Researchers named the delivery operation PasteSwitch. Observed macOS payloads included MacSync and Atomic macOS Stealer (AMOS) plus fake crypto wallets for seed-phrase theft; Windows routes delivered Amatera Stealer (often in-memory) and clipboard clippers AnimateClipper and ZigClipper. Ad mix included HBO Max lures plus OpenAI Codex and fake disk-utility themes. Reddit paused the ads and investigated after reports.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> macOS and Windows</div>
+    <div><strong>How it spreads:</strong> Compromised verified Reddit advertising → ClickFix paste-command lures → stealers/clippers</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.malwarebytes.com/blog/news/2026/09/hbo-maxs-verified-reddit-account-hijacked-to-spread-malware" rel="noopener noreferrer" target="_blank">Malwarebytes / Hudson Rock</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Chosen Brick: Iranian spyware against activists and journalists</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Chosen Brick (CHOSEN BRICK)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Western agencies warn that Iranian state hackers have been using malware called Chosen Brick since at least 2025 to spy on people they see as opponents — including activists and journalists. It steals contacts, emails, and social-media messages from Windows PCs, which can help track someone’s movements. If you think you might be a target, keep devices updated, be wary of unexpected app messages with download links, and contact your IT team or local authorities if something looks wrong.</p></div>
+  <p>A Sep 15, 2026 joint advisory from the UK NCSC, US FBI, and Netherlands AIVD (covered by The Register and published via IC3) describes CHOSEN BRICK, a malware family used by Iranian state cyber actors against individuals worldwide (including UK, US, and Netherlands) since at least 2025. Observed infections are Windows-only. Capabilities center on collecting contacts, emails, and social-media messages to enable movement tracking and repression of dissidents, activists, and journalists. Victim details have appeared on pro-Iranian leak sites, raising personal-safety concerns. Delivery has involved social messaging apps. Agencies urge organizations whose staff may be targeted to circulate guidance for personal as well as corporate devices, and to involve IT providers for forensic review if execution is suspected.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows (personal and corporate endpoints)</div>
+    <div><strong>How it spreads:</strong> Social messaging / targeted social engineering toward individuals of interest to Iranian intelligence</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.theregister.com/security/2026/09/15/iranian-spies-hit-windows-machines-with-chosen-brick-data-stealing-malware/5296646" rel="noopener noreferrer" target="_blank">FBI / NCSC / AIVD (via The Register)</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>CISA added Cisco ISE CVE-2026-76460 (auth bypass to root via privileged API misuse) and Acronis Backup CVE-2026-87886 to KEV around Sep 16 — federal triage deadlines were same-week.</li>
+<li>ChainScript’s Polygon-contract C2 resolver continues the EtherHiding / blockchain dead-drop pattern also seen recently with MovieReaper’s Solana trick.</li>
+<li>ClickFix remains the through-line this week: ChainScript MSI installs, PasteSwitch Reddit ads, and lingering Brevo-adjacent lessons from last issue.</li>
+<li>npm v12 install-script approvals are not enough — Checkmarx’s indexed-btree case shows runtime method hooks can still fire after a &quot;clean&quot; install.</li>
+<li>New recurring sources worth watching: Blackpoint Adversary Pursuit Group write-ups, Checkmarx supply-chain research, Hudson Rock / ADAMnetworks PasteSwitch tracking, and Kaspersky GERT Threat Response notes.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary outlets this week: Kaspersky Securelist/GERT (PAYLOAD GPO, Sep 21), The Hacker News + Blackpoint APG (ChainScript, Sep 21), BleepingComputer + Checkmarx (npm indexed-btree, Sep 20), Malwarebytes + Hudson Rock/ADAMnetworks (PasteSwitch/HBO Max Reddit, Sep 15), FBI/NCSC/AIVD via The Register &amp; IC3 (Chosen Brick, Sep 15). Also scanned CISA KEV alerts (Cisco ISE / Acronis), Huntress Settra follow-ons (covered in #1), and vendor blogs from ESET/Sophos/Malwarebytes Labs weekly roundups.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 2 · 2026-09-21</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>

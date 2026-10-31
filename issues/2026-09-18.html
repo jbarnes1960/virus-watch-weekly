@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 1 (2026-09-18)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 1." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 1</span>
+        <span>2026-09-18</span>
+        <span>Week of Sep 14–18, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #1. Research for this issue was pulled from public reporting on Friday, Sep 18, 2026 (America/Denver). The past week was heavy on ransomware affiliates, supply-chain social engineering, and newly documented stealers and crimeware frameworks. Below are six cited stories from Kaspersky, Huntress, Cisco/Talos coverage, Brevo/BleepingComputer, LastPass/Delphos Labs, and CISA/ConnectWise advisories.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>MovieReaper: modular malware via poisoned movie torrents</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">MovieReaper (HEUR:Trojan.Win64.Agent.gen)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals poisoned popular movie download links so people who thought they were grabbing a film instead installed spyware. Once on the computer, the malware can spy on files and give attackers remote access. Stick to legal streaming and treat unexpected .exe files from torrents as dangerous.</p></div>
+  <p>Kaspersky GReAT (Sep 17) detailed a previously unknown multi-stage crimeware framework dubbed MovieReaper. Attackers compromised the shared torrent-file repository itorrents.org so trackers serving magnet links delivered a malicious .torrent instead of the requested film (including lures named after The Odyssey). The loader uses anti-sandbox tricks, pulls shellcode over HTTP, resolves a second C2 address via Solana blockchain account data, then deploys modules for UAC bypass, persistence (masquerading as ProgramData\…\Telemetry\msedge.exe), and a file-manager implant with ~21 remote filesystem commands. Hundreds of victims across multiple countries were identified; the campaign has been active since at least mid-August 2026.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows (64-bit)</div>
+    <div><strong>How it spreads:</strong> Compromised public torrent file repository → malicious torrents disguised as popular movies → user executes .exe loader</div>
+  </div>
+  <div class="story-source">Source: <a href="https://securelist.com/moviereaper-malware-torrent-odyssey-solana/121344/" rel="noopener noreferrer" target="_blank">Kaspersky Securelist</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Settra ransomware: MeshAgent persistence and anti-recovery TTPs</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Settra</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Settra is ransomware that locks a company’s files and demands payment to unlock them. The attackers also try to wipe recovery options and event logs so IT teams have a harder time restoring systems without paying. Strong VPN and password hygiene help block the usual way they get in.</p></div>
+  <p>Huntress (Sep 17) published analysis of two Settra ransomware incidents (July retail/consumer services; September manufacturing). Settra was first observed around June 2026. In both cases the encryptor was named after the victim domain plus _win64.exe, dropped RESTORE_FILES.txt notes, and encrypted files with .locked or .locked_wip extensions. Operators installed MeshAgent RMM for persistence, cleared Windows event logs, disabled WinRE (reagentc /disable), used diskpart against recovery partitions, and in one case overwrote free space with cipher /w. The September case also showed BYOVD (gdrv.sys). Public reporting has previously tied Settra initial access to VPNs and compromised credentials.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows (enterprise endpoints)</div>
+    <div><strong>How it spreads:</strong> VPN / credential compromise (reported); post-compromise MeshAgent RMM + ransomware executable</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.huntress.com/blog/new-settra-ransomware-variant" rel="noopener noreferrer" target="_blank">Huntress</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Cisco FMC flaws abused for Qilin ransomware and espionage clusters</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Qilin (via UAT-11988) + state-linked clusters</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Serious bugs in Cisco’s firewall management tools let outsiders break in without proper credentials. Once inside, attackers stole data, turned off security tools, and in some cases deployed ransomware. Organizations running these products needed to patch quickly—delay left networks wide open.</p></div>
+  <p>Cisco Talos and follow-on coverage (around Sep 10–11) described three post-compromise activity clusters on Secure Firewall Management Center (FMC) instances exploiting CVE-2026-20079 (auth bypass, CVSS 10.0) and CVE-2026-20316 (low-privilege login). Cluster UAT-11988 used living-off-the-land FMC tooling for recon, tunneling, credential theft, security-tool termination, and Qilin ransomware deployment. CISA added CVE-2026-20079 to KEV with a Sep 12 federal patch deadline. Organizations that delayed interim hotfixes remained exposed while a fuller hardening update rolled out the week of Sep 14.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Cisco Secure Firewall Management Center (network infrastructure → downstream Windows/enterprise)</div>
+    <div><strong>How it spreads:</strong> Exploitation of unpatched FMC web-interface vulnerabilities (unauthenticated / low-priv remote access)</div>
+  </div>
+  <div class="story-source">Source: <a href="https://thehackernews.com/2026/09/cisco-fmc-flaws-exploited-to-steal.html" rel="noopener noreferrer" target="_blank">The Hacker News</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Brevo supply-chain ClickFix hits ~100k customer websites</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">ClickFix / KongTuke-related loaders + WordPress backdoor plugin</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Hackers briefly hijacked trusted Brevo marketing widgets so visitor sites showed fake “are you human?” pages. Those pages tricked people into copying and running commands on their own computers. The vendor fixed the breach, but sites that embed those widgets should check for leftover backdoors.</p></div>
+  <p>On Sep 14, attackers used a stolen long-lived Cloudflare API key hardcoded in Brevo source to deploy a malicious Cloudflare Worker for ~5.5 hours. The Worker injected fake “Cloudflare verify you are human” ClickFix pages into brevo.com, sibforms.com, and embedded JS (forms, Conversations widget, SDK loader) used by customers. Visitors were tricked into pasting/running clipboard commands; on WordPress admin sessions the script tried to install a malicious “Web Media Optimizer”-style plugin. Sansec estimated ~100,000 sites may have been in the blast radius. Brevo revoked the key and published a post-mortem; residual backdoors on customer WP sites remain a concern.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Web visitors (esp. Windows via ClickFix); WordPress sites embedding Brevo widgets</div>
+    <div><strong>How it spreads:</strong> Compromised CDN/API key → edge injection into vendor JS → social-engineering ClickFix + optional WP plugin backdoor</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/brevo-supply-chain-attack-injected-clickfix-scripts-on-customer-sites/" rel="noopener noreferrer" target="_blank">BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Rapuncel infostealer pushed via fake LastPass GitHub repos</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Rapuncel (+ Alinubx.sys EDR-killer driver)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Fake GitHub pages posed as LastPass and other password apps to lure people into downloading malware. The software steals saved logins from browsers and tries to shut off antivirus so it stays hidden. Only install password tools from official websites, never from random search results.</p></div>
+  <p>BleepingComputer (Sep 18) reported an ongoing campaign uncovered by LastPass and Delphos Labs: SEO-optimized fake GitHub repositories impersonating LastPass Authenticator and dozens of other brands. Download buttons redirect to ZIP payloads (inflated up to ~148MB) that abuse a renamed legitimate vsdbg.exe to sideload a malicious DLL. The chain deploys the previously undocumented Rapuncel infostealer plus a Microsoft-signed kernel driver (Alinubx.sys) capable of disabling a large set of AV/EDR products. Rapuncel steals browser data (including Chrome app-bound encryption bypass via injection) and persists as a Windows service that re-kills security tools after reboot. Assessed with moderate confidence as related to BoryptGrab / Cruciferra PUROSANGUE crypter.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> SEO + fake GitHub repos impersonating popular software → sideloaded installer</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/fake-lastpass-authenticator-github-repos-push-new-rapuncel-infostealer/" rel="noopener noreferrer" target="_blank">BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ScreenConnect CVE-2026-84869 actively exploited (worm-like clients)</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Rogue ScreenConnect clients / VBScript chain (CVE-2026-84869)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A flaw in ScreenConnect remote-support software let attackers push malware onto PCs during help sessions. Rogue or compromised support clients could transfer and run files without the usual confirmations. Update ScreenConnect clients promptly and be cautious about who you allow to connect for remote help.</p></div>
+  <p>CISA added ConnectWise ScreenConnect CVE-2026-84869 to KEV (reporting around Sep 11–16). The critical client flaw (CVSS 9.9) can allow file transfer and execution through an active remote session without proper authorization/host confirmation. Huntress documented worm-like behavior: socially engineered rogue clients push a four-stage VBScript chain (1.vbs–4.vbs) to connected hosts during sessions. Patch: ScreenConnect 26.6.5+; temporary mitigation is disabling TransferFiles permissions. Servers are not directly affected, but host clients and access agents must be updated/reinstalled.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows hosts running ScreenConnect clients (cloud and on-prem deployments)</div>
+    <div><strong>How it spreads:</strong> Active support/access sessions + rogue/modified clients; social engineering to install unauthorized clients</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/cisa-warns-of-hackers-exploiting-critical-screenconnect-flaw/" rel="noopener noreferrer" target="_blank">BleepingComputer / CISA</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>CISA confirmed (Sep 15 coverage) that ransomware gangs are exploiting VMware vCenter CVE-2026-59310 (CVSS 9.8, unauthenticated RCE in Syslog server) — already in KEV since mid-August; Broadcom fix shipped July 29.</li>
+<li>MovieReaper’s use of Solana account data for C2 discovery is another reminder that blockchain-backed dead-drops complicate sinkholing.</li>
+<li>Settra operators misspelled the Windows Defender operational log channel in one clear-logs routine — a small DFIR gift when Defender logs survive.</li>
+<li>Brevo’s root cause was a long-lived Cloudflare API key in source with full-account permissions — rotate CDN/API keys and prefer short-lived scoped tokens.</li>
+<li>If you use Brevo widgets/forms: audit WordPress for unauthorized plugins and assume visitors during the Sep 14 UTC window window may have seen ClickFix lures.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary sources for this issue: Kaspersky Securelist (MovieReaper, 2026-09-17); Huntress (Settra, 2026-09-17); The Hacker News / Cisco Talos coverage (FMC + Qilin, ~2026-09-10–11); BleepingComputer + Brevo status post-mortem (ClickFix supply chain, 2026-09-14–18); BleepingComputer / LastPass–Delphos Labs (Rapuncel, 2026-09-18); BleepingComputer / CISA / ConnectWise (ScreenConnect CVE-2026-84869). Research compiled 2026-09-18. Summaries are editorial condensations — verify IOCs and patches against the originals before acting.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-09-18.html">2026-09-18</a> ← current</li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 1 · 2026-09-18</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>

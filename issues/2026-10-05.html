@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 4 (2026-10-05)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 4." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 4</span>
+        <span>2026-10-05</span>
+        <span>Week of Sep 29 – Oct 5, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #4. Research for this issue was pulled from public reporting on Monday, Oct 5, 2026 (America/Denver). The big theme this week is malware hiding inside things you already trust: a fake ChatGPT helper on the real chatgpt.com, spy tools that send their commands through Microsoft Teams, Outlook and OneDrive, and a home-router botnet that disguises its traffic as ordinary internet-call setup. Plus a Russian state phishing campaign that now needs only one click, and a new loader that sneaks password stealers past security tools.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>Fake “Plus 5.6” ChatGPT helper on the real chatgpt.com tricks people into installing remote-control malware</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Unnamed RAT delivered via Custom GPT “Plus 5.6” + ClickFix</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals built a fake add-on chatbot, called “Plus 5.6”, that lives on the real ChatGPT website and is promoted through paid Google search ads. Whatever you type, it tells you the service is busy and sends you to a “backup” page that looks like a Cloudflare security check and asks you to paste a command into Windows. Doing that installs a program that lets strangers see your screen, turn on your camera and microphone, and steal browser logins. No real website will ever ask you to paste a command to prove you’re human, so close the tab, and if you already did it, treat the PC as infected and change passwords from another device.</p></div>
+  <p>Huntress (late Sep 2026; BleepingComputer coverage) documented attacker-built ChatGPT Custom GPTs titled “Plus 5.6”, reached in some cases via sponsored Google results for “chatgpt”, that reply with a fake service-availability notice pointing to a Google Sites page (sites.google.com/view/antibot172881) posing as a Cloudflare CAPTCHA. The ClickFix lure runs PowerShell that installs ISOSimple.msi, which sideloads a modified Canon DLL via the signed Canon COTFileReadApp.exe (v2 uses a signed Stardock binary and a loader hidden in a real NuGet package). An eight-stage chain extracts shellcode from a WAV file, applies AMSI bypass/ntdll unhooking/anti-VM checks, and unpacks the RAT from a custom encrypted archive. Capabilities: remote desktop, camera/mic/system audio capture, data from 17 browsers, file search, follow-on payloads; DNS-over-HTTPS for C2 resolution. Persistence: Run key and scheduled task named “Canon Configuration Reader”. Huntress handled at least 40 incidents tied to the Google Sites page (two confirmed via Custom GPT). OpenAI removed the first GPT on Sep 25; a replacement appeared Sep 27.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Google malvertising → malicious Custom GPT on chatgpt.com → Google Sites fake CAPTCHA (ClickFix) → PowerShell → MSI + DLL sideloading → RAT</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.huntress.com/blog/chatgpt-custom-gpts-clickfix-rat" rel="noopener noreferrer" target="_blank">Huntress / BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ClingSTUN / Cling: botnet hijacks old routers and cameras, hides its traffic as internet-call setup</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">ClingSTUN (FortiGuard) / Cling (Nozomi Networks)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A new piece of Linux malware is breaking into home and office routers, security cameras, video recorders and similar gadgets that never got their security updates. Once inside, it turns the device into a secret relay that criminals can route their own traffic through, and it can also attack other devices or flood websites. It disguises its check-ins as the normal “find my way through the router” traffic that video-call apps use, so it is easy to miss. Update or replace old routers and cameras, change their default passwords, and turn off remote management you don’t use.</p></div>
+  <p>FortiGuard Labs (Oct 5; SecurityWeek and Infosecurity Magazine coverage) describes ClingSTUN, a Linux back-connect proxy backdoor that abuses public STUN servers to learn its external address, keep NAT bindings open and receive operator commands. Across three campaign periods it expanded to 24 initial-access exploits, including Hytec (CVE-2022-36553), EnGenius (CVE-2025-34035), D-Link UPnP (CVE-2024-23625), Ivanti Connect Secure (CVE-2023-46805, CVE-2024-21887), plus Avtech, Lantronix, Linear, MeiG, Realtek, Sunhillo, Tenda and TP-Link flaws, and hardcodes seven more exploits (China Mobile, KGUARD, Linksys, LB-LINK, MVPower, Realtek SDK, TBK DVR) for self-propagation. It kills competing processes and watchdogs, copies itself to system paths, persists via boot scripts, masquerades with init-process metadata, and supports remote command execution. Nozomi Networks Labs (Oct 1) independently reported the same family as “Cling”, seen exploiting Realtek CVE-2021-35394, masquerading as Google and supporting proxying, tunneling and DDoS.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Linux-based IoT: routers, access points, DVRs/NVRs, IP cameras, some VPN appliances</div>
+    <div><strong>How it spreads:</strong> Exploitation of known unpatched flaws in internet-exposed devices → worm-style self-propagation</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.securityweek.com/linux-backdoor-abuses-stun-protocol-exploits-dozens-of-flaws/" rel="noopener noreferrer" target="_blank">FortiGuard Labs via SecurityWeek / Nozomi Networks Labs</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>DragonForce ransomware gang hides spy tools inside Microsoft Teams call traffic</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">DragonForce TURN/MQTT backdoors (Go in-memory implant + persistent backdoor)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>DragonForce is a large ransomware gang that locks company files and demands payment. Researchers found it planting hidden backdoors that talk to the criminals through Microsoft Teams’ own call-relay servers, so on the network it looks like ordinary Teams calls, and a newer version switches to a backup chat-style channel if that is blocked. This lets the gang stay inside a company quietly for weeks before striking. Businesses should watch for Teams traffic from computers or servers that shouldn’t be making calls, and keep good offline backups.</p></div>
+  <p>Lab52 (Oct 1; SecurityOnline coverage) attributes two backdoors to the DragonForce RaaS/“cartel”: a Go-based in-memory implant matching Symantec’s June 2026 report of Microsoft Teams TURN relay abuse (anonymous Teams visitor token used to reach relays; dwell time 1–2 months at a US services firm), and a newer persistent backdoor that keeps TURN as primary C2 but falls back to an MQTT broker, registering a session and polling a per-host task topic for XOR-encrypted JSON tasks, with payloads delivered in numbered chunks. Tradecraft includes DLL sideloading, scheduled-task persistence, a DPAPI-locked payload bound to the host, and memory encryption while idle. Initial access not described.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows (corporate networks)</div>
+    <div><strong>How it spreads:</strong> Post-compromise deployment by ransomware affiliates; C2 tunneled via Microsoft Teams TURN relays with MQTT fallback</div>
+  </div>
+  <div class="story-source">Source: <a href="https://lab52.io/blog/backdoors-in-the-dungeon-turn-mqtt-abused-by-dragonforce/" rel="noopener noreferrer" target="_blank">Lab52</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Star Blizzard’s “RedFlick”: Russian state phishing now needs just one click to plant a backdoor</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">CosmicPulse backdoor via NOROBOT/BAITSWITCH downloader (RedFlick delivery)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A Russian government-backed hacking group that targets officials, think tanks, charities and Ukraine supporters has made its phishing emails more dangerous. Before, victims had to follow several steps; now, simply opening the file attached to a convincing email can quietly set up hidden tasks that install a spying program. The emails often pretend to come from people or organizations you know, sent from free email accounts. Be wary of unexpected attachments, even from “familiar” names, and confirm with the sender by phone or a separate message before opening.</p></div>
+  <p>Microsoft Threat Intelligence (Sep 29; BleepingComputer, SecurityWeek, CyberScoop, Dark Reading coverage) reports Star Blizzard adopted “RedFlick”, replacing earlier ClickFix chains. Phishing archives carry VHDX/LNK/PDF lures that use trusted Windows components (conhost.exe, cmd.exe, MSI installers) to create scheduled tasks (e.g., “Internet Quality Test Connection”, “Network Configuration Manager”, “System Health Monitor”) that fetch a Control Panel applet (.cpl) downloader (NOROBOT/BAITSWITCH). BAITSWITCH pulls a Python 3.8 runtime and bootstrapper to run CosmicPulse, a Python backdoor that executes attacker-supplied code to download/run files and exfiltrate documents. Microsoft observed at least 13 campaigns hitting 100+ organizations, mainly in the US and UK; the actor impersonates trusted contacts and uses free email providers.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Spear-phishing with archive/shortcut lures → scheduled tasks → .cpl downloader → Python CosmicPulse backdoor</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.microsoft.com/en-us/security/blog/2026/09/29/star-blizzard-refines-phishing-and-malware-delivery-with-the-redflick-technique/" rel="noopener noreferrer" target="_blank">Microsoft Threat Intelligence</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Antino: China-linked spy backdoor takes orders through Outlook and OneDrive</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">Antino (UAT-11587)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A China-linked spying group is sending targeted emails to government and policy organizations across Asia. Victims who open the attachment get a hidden program, called Antino, that receives its instructions as messages in an Outlook mailbox and sends stolen files through OneDrive. Because that traffic looks like normal Microsoft 365 use, it is hard for security tools to spot. Most people won’t be targeted, but organizations should monitor unusual Microsoft 365 app access and treat unexpected document attachments with care.</p></div>
+  <p>Cisco Talos (Sep 30; The Hacker News coverage Oct 2) tracks UAT-11587, a China-nexus cluster targeting government and policy organizations in Taiwan, India, the Philippines, Cambodia, Pakistan, Thailand and Myanmar (first seen Sep 2025 against Taiwanese academic/think-tank/civil-society targets). Spear-phishing with tailored decoys leads through HTA/WSF stagers, Cloudflare-hosted staging and .NET deserialization to DLL sideloading of slc.dll via Microsoft-signed GatherOsState.exe. Antino is a Rust Windows backdoor supporting recon, shell/PowerShell execution, file transfer, in-memory shellcode loading and persistence. Its only C2 is Microsoft 365 via Microsoft Graph: it polls an actor Outlook folder every 10 seconds for “command_req_[session_id]” messages and uses OneDrive for heartbeat and file transfer.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Targeted spear-phishing → HTA/WSF stager → DLL sideloading → Antino with Microsoft Graph (Outlook/OneDrive) C2</div>
+  </div>
+  <div class="story-source">Source: <a href="https://blog.talosintelligence.com/china-nexus-uat-11587-targets-government-and-policy-organizations-across-asia-with-antino-backdoor/" rel="noopener noreferrer" target="_blank">Cisco Talos / The Hacker News</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>2CLoader: new sneaky installer slips password stealers past security tools</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">2CLoader (delivering Vidar, Remus stealers and XWorm RAT)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>2CLoader is a “delivery truck” program: it doesn’t steal anything itself, but it quietly drops password-stealing malware onto Windows PCs. It checks whether it is being watched by security researchers and stays dormant if so, and it even feeds fake details about the computer to other checks. The stealers it installs grab saved browser passwords, cookies that keep you logged in, and other data; some victims also get a remote-control tool. Avoid cracked software and “free” downloads from unofficial sites, and use multi-factor sign-in so a stolen password alone isn’t enough.</p></div>
+  <p>Zscaler ThreatLabz (reported Oct 1 via Cyber Security News) identified 2CLoader, active since August 2026, primarily delivering Vidar and Remus infostealers plus XWorm RAT. It stores encrypted config/payload in a PE resource (rolling XOR + AES-GCM with code-derived key), uses indirect syscalls via Hell’s Gate from a clean ntdll copy, and scores the environment with anti-VM/debugger/idle/resource/username checks before decrypting. Some builds install inline API hooks to spoof usernames, computer names, registry/environment values, volume serials and IPv4 data. Persistence options: Run/RunOnce, Startup folder, scheduled task, Windows Load key, logon script. Execution via in-memory manual mapping or process hollowing (default dllhost.exe) with optional explorer.exe parent spoofing. C2 over HTTP with XOR-encrypted JSON beacons.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Loader distribution (delivery vector not fully detailed) → Vidar / Remus / XWorm</div>
+  </div>
+  <div class="story-source">Source: <a href="https://cybersecuritynews.com/new-2cloader-malware/amp/" rel="noopener noreferrer" target="_blank">Zscaler via Cyber Security News</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>CISA (Oct 1) added Fortinet FortiMail CVE-2026-104286, a critical path-traversal flaw exploited as a zero-day, to its Known Exploited Vulnerabilities list. If your company runs FortiMail, apply Fortinet’s fix or workaround now.</li>
+<li>Cisco warned of actively exploited CVE-2026-76504 (CVSS 9.8) in Catalyst SD-WAN Manager with no patch available yet, per Check Point’s Oct 5 bulletin. Limit who can reach the management interface.</li>
+<li>Apple patched CoreGraphics CVE-2026-86950, used in highly targeted attacks via booby-trapped images or PDFs. Update your iPhone, iPad and Mac.</li>
+<li>Warlock ransomware is breaking into unpatched SharePoint servers (ToolShell flaws), switching off security tools and encrypting dozens of machines in a single intrusion (Check Point weekly report, Oct 5).</li>
+<li>Mac users: Kaspersky (Sep 25) found a new MacSync stealer version spread through fake crypto-wallet apps that can hide its commands inside a public iCloud calendar file. Only install Mac apps from the App Store or the developer’s real site.</li>
+<li>Global Group ransomware is emailing fake “Suggested Payment Plan” PDFs that lead to an ISO file and abuse the legitimate WinMerge app to fetch its encryptor (Cofense research, Hackread coverage Sep 30).</li>
+<li>Theme of the week: attackers keep hiding inside trusted brands and services, from chatgpt.com and Google Sites to Microsoft Teams, Outlook and OneDrive. Something looking “official” is no longer proof it’s safe.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary sources this week: Huntress blog (Custom GPT ClickFix RAT) with BleepingComputer coverage; FortiGuard Labs ClingSTUN via SecurityWeek (Oct 5) and Infosecurity Magazine, plus Nozomi Networks Labs “Cling” (Oct 1); Lab52 (DragonForce TURN/MQTT, Oct 1) with SecurityOnline coverage; Microsoft Threat Intelligence (Star Blizzard RedFlick, Sep 29) with BleepingComputer/SecurityWeek/Dark Reading; Cisco Talos (Antino/UAT-11587, Sep 30) with The Hacker News; Zscaler 2CLoader via Cyber Security News (Oct 1). Quick hits from CISA KEV (Oct 1), Check Point Research weekly Threat Intelligence Report (Oct 5), Kaspersky Securelist (MacSync), Cofense/Hackread (Global Group). New recurring sources worth watching: Lab52 (S2 Grupo), Nozomi Networks Labs, Check Point’s Monday Threat Intelligence Report, and Zscaler ThreatLabz. Skipped StormEncryptor (reported in August) as not new this week.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-09-28.html">2026-09-28</a></li>
+<li><a href="2026-09-21.html">2026-09-21</a></li>
+<li><a href="2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 4 · 2026-10-05</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>
