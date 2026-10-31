@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 5 (2026-10-12)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 5." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 5</span>
+        <span>2026-10-12</span>
+        <span>Week of Oct 6 – 12, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #5. Research for this issue was pulled from public reporting on Monday, Oct 12, 2026 (America/Denver). This week&#x27;s theme: malware that hides where you&#x27;d least expect it — inside brand-new budget Android phones, inside thousands of fake GitHub projects, and inside stealers that now go after AI assistant logins. Plus a takedown-resistant Windows loader, North Korea-linked ransomware hidden in a résumé, and a brand-new extortion gang.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>Midnight Mimosa: malware pre-installed in the firmware of budget Android phones</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Midnight Mimosa (firmware proxyware)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Some cheap Android phones and tablets are infected before you ever turn them on — the bad code is baked into the phone&#x27;s built-in software at the factory or supply chain. It quietly uses your phone and internet connection to click fake ads and to rent your connection out to strangers, and it can install or remove apps without asking. You can&#x27;t fix it by deleting an app. Buy phones from well-known brands and reputable sellers, keep them updated, and be wary of no-name bargain devices.</p></div>
+  <p>Bitdefender (report Oct 8, updated Oct 9) found Midnight Mimosa embedded as a system package in firmware of low-cost Android devices from several brands on MediaTek platforms. It monetizes via ad fraud and residential proxy services and can silently install/remove apps and load new code. Thousands of devices in 150+ countries over ~2 years (Mexico, France, Italy, US, Germany, Brazil, Spain led). Bitdefender corrected one indicator (85.17.70.38:6000) as a sinkhole, not live C2.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Android (budget MediaTek devices)</div>
+    <div><strong>How it spreads:</strong> Supply chain / pre-installed firmware</div>
+  </div>
+  <div class="story-source">Source: <a href="https://cybersecuritynews.com/midnight-mimosa/" rel="noopener noreferrer" target="_blank">Bitdefender via Cyber Security News</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>FakeGit returns: 17,610 fake GitHub projects push SmartLoader and the StealC password stealer</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">FakeGit / SmartLoader / StealC</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals run thousands of copycat project pages on GitHub (a popular site where programmers share code), many posing as AI tools. The big “Download” button gives you a ZIP file that installs a password stealer. It grabs saved passwords and even your logged-in sessions, which can let attackers into accounts without needing your password or two-factor code. Only download software from the official project or vendor page, and be suspicious of a GitHub page whose main feature is a download button.</p></div>
+  <p>Apiiro (reported by BleepingComputer Oct 8) says FakeGit reactivated Oct 4 across 17,610 repos, re-pointing 13,000+ in 34 hours (peak 2,999/hour). 97% of sampled commits only changed the README; 88% pointed Download at a ZIP installing SmartLoader, which reads its C2 from a Polygon smart contract and deploys StealC. Many repos impersonate AI skills/MCP servers; ~700 accounts appear to belong to legitimate developers. 71% of the fleet was missing from URLhaus before the report.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Fake GitHub repositories → ZIP download → SmartLoader → StealC</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/fakegit-malware-campaign-returns-with-17-610-malicious-github-repos/" rel="noopener noreferrer" target="_blank">BleepingComputer / Apiiro</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Warden Stealer: fast-growing password thief that also steals AI assistant logins</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Warden Stealer (aka CallbackBeaver)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Warden is a password-stealing program sold to criminals as a service, and it&#x27;s now one of the most common ones seen. It spreads through pirated software, game cheats, fake ads and “paste this command” tricks. Besides browser passwords and crypto wallets, it steals the login keys and chat histories of AI assistants and coding tools, and it can swap a crypto address you copy for the attacker&#x27;s. Avoid cracked software and cheats, never paste commands a website gives you, and sign out/reset AI tool keys if a PC gets infected.</p></div>
+  <p>Gen Threat Labs (SecurityOnline, Oct 12) links CallbackBeaver and Warden Stealer, a Rust MaaS stealer advertised since Aug 2026 (early builds May). Targets Windows 8–11; ranks alongside Vidar, Amatera and Remus in Gen telemetry. Includes loader and crypto clipper, Chrome ABE bypass, and (since v1.9) theft of config/tokens/MCP credentials/prompt histories from AI assistants and agentic coding tools.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Cracked software, game cheats, malvertising, ClickFix</div>
+  </div>
+  <div class="story-source">Source: <a href="https://securityonline.info/warden-stealer-rust-infostealer/" rel="noopener noreferrer" target="_blank">SecurityOnline / Gen Threat Labs</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>AvisLoader: a Windows loader that talks through an encrypted chat network to survive takedowns</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">AvisLoader</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>AvisLoader is a “foot in the door” program: once it&#x27;s on a PC it lets criminals install whatever they want next. It gets in through a fake web page that tells you to paste a command to fix something. Instead of contacting one server that police could seize, it takes orders over Tox, an encrypted peer-to-peer chat network, so there&#x27;s nothing simple to shut down. Again: no legitimate site needs you to paste commands into Windows.</p></div>
+  <p>Varonis Threat Labs (BleepingComputer, Oct 12) found AvisLoader on an exposed staging server with a ClickFix lure and an &#x27;AvisLoader Command Center&#x27; panel. 64-bit loader statically links c-toxcore and uses Tox P2P for C2 and payload delivery; panel supports shell tasks, victim targeting by location/hardware, and file staging. Toolkit includes shortcut persistence (VLCAssistant), a UAC-bypass helper and a process-hiding DLL. Advertised on a cybercrime forum.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> ClickFix lure → loader → follow-on payloads</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/inside-avisloader-a-windows-malware-loader-built-to-resist-disruption/" rel="noopener noreferrer" target="_blank">Varonis / BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Funhouse ransomware linked to North Korea&#x27;s Kimsuky arrives in a fake résumé</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Funhouse (Endpoint ransomware family)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A North Korea-linked hacking group is sending fake job résumés as documents. Clicking a link inside sets off a chain of hidden steps that first installs a remote-control tool and then ransomware that locks your files (they end in “.Funhouse”) and demands payment. Treat unexpected résumés and attachments with care, especially ones asking you to click a link inside the document, and keep offline backups.</p></div>
+  <p>AhnLab ASEC (Oct 12) analyzed Funhouse, an evolution of the Endpoint ransomware family, distributed via a malicious Hangul (HWP) résumé with an in-document hyperlink launching Batch/VBS/PowerShell/Python and bitmap-embedded stages; a Quasar RAT variant loads the ransomware. HC-128 encryption, .Funhouse extension, note &#x27;How To Restore Your Files.Txt&#x27;, contact funhouse8764@tutamail.com. Attributed to Kimsuky with medium confidence. Primarily Korean targets.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Malicious HWP résumé → multi-stage scripts → Quasar RAT → ransomware</div>
+  </div>
+  <div class="story-source">Source: <a href="https://lazarus.day/reports/from-endpoint-to-funhouse-evolution-of-ransomware-families-and-kimsuky-linked-distribution-cases-mlgln/" rel="noopener noreferrer" target="_blank">AhnLab ASEC (via lazarus.day)</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Umbra: brand-new extortion gang posts nine victims in three days</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">Umbra (extortion group)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A new criminal group called Umbra appeared on Oct 6 and quickly claimed nine victims — universities, tech, energy, retail and food companies across the Middle East, South Asia and Latin America. Nobody yet knows how it breaks in. It&#x27;s a reminder that new gangs pop up constantly; the basics (updates, multi-factor sign-in, backups) protect against them all.</p></div>
+  <p>Orbitaley (Oct 8), using RansomLook data, reports Umbra&#x27;s first leak-site posts on Oct 6, reaching nine claims (Egypt, Saudi Arabia, India, Brazil, others). No vendor analysis of access vectors or tooling yet; an unrelated Rust encryptor named Umbra (Aug 2026) is not confirmed to be linked. Claims are unverified.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Unknown</div>
+    <div><strong>How it spreads:</strong> Unknown</div>
+  </div>
+  <div class="story-source">Source: <a href="https://orbitaley.com/news/umbra-a-new-extortion-group-posts-nine-claims-in-just-three-days-6766o" rel="noopener noreferrer" target="_blank">Orbitaley / RansomLook</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>BlossCraft Launcher (reported Oct 2, tracked Oct 10): a fake Minecraft-style game launcher that steals browser passwords, Discord and gaming sessions, and Wi-Fi passwords. Kids&#x27; and gamers&#x27; PCs are the target — only download games from official stores.</li>
+<li>Akira ransomware (Huntress, Oct 8): responders rebuilt an Akira attack that used a disguised “svchost.exe” tunnel, Rclone to copy stolen data to the cloud, and deleted backups before encrypting file shares.</li>
+<li>ClingSTUN follow-up (Oct 6): more analysis says it exploits 24 known router/camera bugs dating back to 2014 — another nudge to update or replace old home and office gadgets.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary sources this week: Bitdefender Midnight Mimosa (Oct 8–9) via Cyber Security News; Apiiro FakeGit research via BleepingComputer (Oct 8); Gen Threat Labs Warden Stealer via SecurityOnline (Oct 12); Varonis Threat Labs AvisLoader via BleepingComputer (Oct 12); AhnLab ASEC Funhouse (Oct 12); Orbitaley/RansomLook on Umbra (Oct 8). Quick hits from Malpedia/Threadlinqs (BlossCraft), IT Security Guru/Huntress (Akira), Aviatrix (ClingSTUN). New sources scouted this week: Apiiro blog, Gen Threat Labs, Orbitaley, Threadlinqs, lazarus.day. Skipped ChainScript (covered in issue #2).</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-10-05.html">2026-10-05</a></li>
+<li><a href="2026-09-28.html">2026-09-28</a></li>
+<li><a href="2026-09-21.html">2026-09-21</a></li>
+<li><a href="2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 5 · 2026-10-12</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>

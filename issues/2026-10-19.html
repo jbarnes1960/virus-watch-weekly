@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 6 (2026-10-19)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 6." />
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="../assets/brand/nexa-logo.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="../index.html">Latest</a>
+        <a href="../subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 6</span>
+        <span>2026-10-19</span>
+        <span>Week of Oct 13 – 19, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #6. Research for this issue was pulled from public reporting on Monday, Oct 19, 2026 (America/Denver). This week&#x27;s theme: trusted tools turned against their users. A popular Windows backup program quietly handed out a backdoor through its own updates, a cloud backup service&#x27;s keys were used to get into Microsoft 365 email at small businesses, and fake copies of banking apps on Android disable the bank&#x27;s own safety checks. Plus a Mac password thief that now sticks around, booby-trapped Linux packages, and stealthy malware living inside Fortinet firewalls.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <div class="stories">
+<article class="story">
+  <div class="story-header">
+    <h4>AOMEI Backupper&#x27;s own update servers briefly handed out a backdoor</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">CROSSROAD downloader / SHINYROAD backdoor (UNC7017)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>AOMEI Backupper is a popular Windows program for backing up and cloning disks. For a few minutes at a time on at least three days this summer, attackers swapped the files on the company&#x27;s own update servers, so any copy that checked for updates during those minutes installed a hidden remote-control program. You didn&#x27;t have to click anything; just having the program running was enough. If you or your IT person use AOMEI Backupper or AnyViewer, have the PC scanned, because AOMEI&#x27;s server fix does not clean machines that were already infected.</p></div>
+  <p>Google Threat Intelligence Group, Mandiant and ManageEngine&#x27;s Threat Analysis Lab (reported by The Hacker News, Oct 16) say UNC7017 altered AOMEI Backupper&#x27;s unsigned update/notification files (down_html.ini, Notifycfg.ini) for 5–10 minute windows on May 28, Jul 16 and Jul 20, 2026. Clients polling then ran the CROSSROAD downloader, which staged signed Radmin, created a 3-hour scheduled task, and side-loaded a DLL that loads the SHINYROAD backdoor (remote shell + fetch/run code, single hard-coded C2). Some hosts later received Adaptix C2 disguised as Nitro PDF; the Jul 20 change also used a hidden WebDAV pop-up to leak NetNTLMv2 hashes. Victims in IT services, telecom and higher ed across 11 countries, including the US; CROSSROAD skips hosts in China.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Windows</div>
+    <div><strong>How it spreads:</strong> Supply chain: tampered vendor update files (no user action)</div>
+  </div>
+  <div class="story-source">Source: <a href="https://thehackernews.com/2026/10/attackers-tampered-with-aomei.html" rel="noopener noreferrer" target="_blank">The Hacker News (GTIG, Mandiant, ManageEngine)</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ConnectWise Cloud Backup (formerly SkyKick) keys abused to break into Microsoft 365 tenants</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">ConnectWise / SkyKick service-principal abuse</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Lots of small businesses have an IT company that uses a cloud backup service to copy their Microsoft 365 email and files. Attackers got hold of that backup service&#x27;s master keys and used them to log into customers&#x27; Microsoft 365 accounts as the backup app itself, which means multi-factor sign-in codes didn&#x27;t stop them. In some cases they gave themselves administrator powers. If your business uses Microsoft 365 and an outside IT provider, ask them this week whether you use ConnectWise or SkyKick and whether they&#x27;ve checked for and removed these connections.</p></div>
+  <p>BleepingComputer (Oct 17, updated Oct 18): ConnectWise shut down Cloud Backup after unauthorized access to application identities; Microsoft calls it an active supply-chain attack. Activity from 144.172.64[.]128 from at least Oct 13–15 used the Cloud Backup app secret to authenticate as the service principal (MFA ineffective), with Graph reconnaissance. Huntress saw 162+ compromised tenants and, on ~50, Cloud Management service principals self-assigning directory roles (mostly Exchange Administrator; one Global Administrator with persistence). Admins should disable the ConnectWise/SkyKick apps, review app secrets/certificates added since Oct 13, and note existing tokens stay valid until expiry. ConnectWise reports no evidence backups were compromised.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Microsoft 365 / Entra ID (cloud)</div>
+    <div><strong>How it spreads:</strong> Stolen vendor app credentials (cloud supply chain)</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/hackers-breach-microsoft-365-tenants-via-connectwise-supply-chain-attack/" rel="noopener noreferrer" target="_blank">BleepingComputer (Huntress, Microsoft, Todyl)</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Hirudo: Android malware swaps your real banking app for a rigged copy</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">Hirudo (Android banking trojan)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Hirudo hides inside normal-looking shopping, adult, or short-video apps. After a fake “update” prompt, it uninstalls your real banking app and installs a tampered copy that looks the same but has its security checks switched off. From there it can steal your banking password and PIN, read your text messages, watch your screen live, and use your cameras. Right now it mostly targets banks in Indonesia and parts of Asia and Latin America, but the trick could spread. Only install apps from the Play Store, be very suspicious of apps asking for “Accessibility” permission, and if your banking app suddenly needs reinstalling, get it straight from the official store.</p></div>
+  <p>ThreatFabric (via BleepingComputer, Oct 14) found Hirudo replacing at least eight banking apps (seven Indonesian banks; also targets China, India, Mexico, Morocco, Thailand). Loaders posing as Shopora, 1V1 X, ZoyaTV and KoiShort show a fake update to gain Accessibility, uninstall the genuine app and install a patched copy with a YAHFA/Dobby hooking engine that spoofs signing certificates, hides Accessibility services, removes screenshot protection, and relays Play Integrity/key attestation via the operator. Capabilities: credential/PIN theft, fake checkout pages, SMS collection, live screen streaming, camera and audio access. Its attestation keybox is publicly leaked and partly revoked, so server-side checks can catch it.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Android</div>
+    <div><strong>How it spreads:</strong> Trojanized lifestyle apps → fake update → banking app replacement</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/hirudo-android-malware-replaces-banking-apps-to-evade-security-checks/" rel="noopener noreferrer" target="_blank">BleepingComputer / ThreatFabric</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>ICMacOS: a Mac password stealer grows into a full remote-control tool</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">ICMacOS (aka Icarus macOS)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Macs get malware too. ICMacOS is sold to criminals as a ready-made kit. It starts with a web page telling you to paste a command into the Mac&#x27;s Terminal app, then shows a fake System Settings box asking for your Mac password. With that password it empties your saved browser passwords, the Mac Keychain, crypto wallets, and chats. The newest version also stays on the Mac and lets attackers type commands on it whenever they like. Never paste commands from a website into Terminal, and be suspicious of password pop-ups that appear right after you do something on a web page.</p></div>
+  <p>SOCRadar Threat Research Unit (Oct 12; covered by SOCtember Oct 14) says ICMacOS, a MaaS sold by Russian-speaking operator GlowComa since early Sep 2026 on XSS, Exploit.in and Rehub, uses Icarus ClickFix Terminal-paste lures and a spoofed System Preferences prompt validated with security unlock-keychain. The Go Mach-O payload steals Chromium/Gecko/Safari credentials and cookies, 29 wallet/password-manager extensions, desktop wallets, Telegram/WhatsApp/Discord/iMessage data, SSH/AWS/Kubernetes/Docker/.env files and Apple Notes. Version 2 adds a com.apple.systemupdater LaunchAgent and a Gorilla WebSocket shell to escapeai[.]live. Geofences CIS locales.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> macOS</div>
+    <div><strong>How it spreads:</strong> ClickFix Terminal-paste lures → fake password prompt</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.soctember.com/detection/socradar-icmacos-infostealer-rat" rel="noopener noreferrer" target="_blank">SOCtember / SOCRadar</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>Fake copies of popular Arch Linux helper tools ran malware as the all-powerful root user</h4>
+    <span class="severity severity-med">Med</span>
+  </div>
+  <div class="malware-name">Trojanized AUR packages (yay/paru typosquats)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Arch Linux users install a lot of extra software from a community-run catalog called the AUR. Someone uploaded look-alike versions of two very popular helper tools, using slightly misspelled names such as “yyay,” that secretly ran a script with full control of the computer. The community spotted it within minutes and removed the packages, but anyone who installed them should treat that computer as compromised. This mostly affects tech-savvy Linux users; the lesson for everyone is to double-check the exact spelling of anything you install.</p></div>
+  <p>BleepingComputer (Oct 15): detected Oct 13, user “marchos1as” uploaded typosquatted AUR packages impersonating the yay and paru AUR helpers. They bundled legitimate upstream code with a malicious install scriptlet that fetched and ran a remote shell script with root privileges, retrieved through a Wayback Machine URL pointing to a personal repo (hellscripter/install-scripts). AUR banned the account and removed the packages. Follows a June campaign of ~400 credential-stealing AUR packages and a July incident that led Arch to temporarily disable package adoption.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Linux (Arch and derivatives)</div>
+    <div><strong>How it spreads:</strong> Typosquatted community packages</div>
+  </div>
+  <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/fake-arch-linux-packages-push-malware-with-root-privileges/" rel="noopener noreferrer" target="_blank">BleepingComputer</a></div>
+</article>
+<article class="story">
+  <div class="story-header">
+    <h4>PEERSTITCH: memory-only malware planted inside Fortinet firewalls</h4>
+    <span class="severity severity-high">High</span>
+  </div>
+  <div class="malware-name">PEERSTITCH (FortiOS implant)</div>
+  <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A firewall is the box that guards the front door of a company&#x27;s network. A skilled hacking group broke into Fortinet firewalls at a telecom IT provider using known security holes, then planted malware that lives only in the firewall&#x27;s memory and hides inside its normal programs, so it leaves almost no trace. The U.S. government&#x27;s cyber agency told federal offices to patch the flaw by today. If your business has a Fortinet firewall, ask whoever manages it to confirm it&#x27;s fully updated.</p></div>
+  <p>Palo Alto Networks Unit 42 (via The Hacker News / SC Media, Oct 16) found a threat actor that first exploited FortiManager CVE-2024-47575 to steal configs and credentials for 500+ managed FortiGates at a telecom MSP, then used FortiOS path traversal CVE-2025-61624 to deploy PEERSTITCH, a memory-resident ARM64 implant injected into the miglogd and iked daemons as a covert channel with no listening ports or on-disk persistence. A second C2 used Apache mod_md for an SSH reverse shell, and the actor wiped forensic artifacts. CISA added CVE-2025-61624 to KEV on Oct 16 with an Oct 19 federal deadline.</p>
+  <div class="story-meta">
+    <div><strong>Platforms:</strong> Fortinet FortiOS / FortiManager (network appliances)</div>
+    <div><strong>How it spreads:</strong> Exploited firewall-management and FortiOS vulnerabilities</div>
+  </div>
+  <div class="story-source">Source: <a href="https://thehackernews.com/2026/10/attackers-exploit-fortios-flaw-to.html" rel="noopener noreferrer" target="_blank">The Hacker News / Palo Alto Networks Unit 42</a></div>
+</article>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>CikaBika (Darktrace, Oct 14): a new Windows remote-control program that arrives as a fake Word document inside a disk-image file and takes its orders through Discord chat channels. If a “document” you open turns out to be a shortcut or disk image, stop and report it.</li>
+<li>The Seven Deadly Sins (Orbitaley/RansomLook, Oct 15): a brand-new extortion group posted seven alleged victims on its first day, including tech companies and a Brazilian hospital. The claims are unverified, and nothing is known yet about how it breaks in.</li>
+<li>Warden Stealer follow-up (Gen Threat Labs, Oct 8): the original research behind last week&#x27;s story confirms it steals saved logins and chat histories from AI assistants and coding tools. If an infected PC had AI tools signed in, sign out and reset those keys too.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary sources this week: GTIG/Mandiant/ManageEngine AOMEI research via The Hacker News (Oct 16); BleepingComputer on ConnectWise Cloud Backup with Huntress, Microsoft and Todyl findings (Oct 17–18); ThreatFabric Hirudo via BleepingComputer (Oct 14); SOCRadar ICMacOS via SOCtember (Oct 12–14); BleepingComputer on trojanized AUR packages (Oct 15); Palo Alto Networks Unit 42 PEERSTITCH via The Hacker News and SC Media (Oct 16). Quick hits from Darktrace via iSec News (CikaBika), Orbitaley/RansomLook (Seven Deadly Sins), and Gen Digital&#x27;s blog (Warden). New sources scouted this week: SOCtember, iSec News, SC Media briefs, Todyl research, and ManageEngine&#x27;s Threat Analysis Lab. Skipped stories already covered (Midnight Mimosa, AvisLoader, Warden as a lead) and items without primary reporting.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="../subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=Subscribe%20Virus%20Watch%20Weekly">jbarnes@nexalending.com</a> with subject “Subscribe Virus Watch Weekly”.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="2026-10-12.html">2026-10-12</a></li>
+<li><a href="2026-10-05.html">2026-10-05</a></li>
+<li><a href="2026-09-28.html">2026-09-28</a></li>
+<li><a href="2026-09-21.html">2026-09-21</a></li>
+<li><a href="2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 6 · 2026-10-19</p>
+      <p>
+        <a href="../subscribe.html">Subscribe</a>
+        ·
+        <a href="../subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="../index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="../assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="../assets/newsletter.js"></script>
+</body>
+</html>
