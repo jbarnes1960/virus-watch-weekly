@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Subscribe — Virus Watch Weekly</title>
+  <meta name="description" content="Subscribe or unsubscribe from Virus Watch Weekly." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Subscribe — Virus Watch Weekly" />
+  <meta property="og:description" content="Plain-English malware and computer-virus alerts from James Barnes, NEXA Lending." />
+  <meta property="og:image" content="https://jbarnes1960.github.io/virus-watch-weekly/assets/brand/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">VW</div>
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="index.html">Latest</a>
+        <a href="subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="form-card">
+      <h2>Subscribe / Unsubscribe</h2>
+      <p class="lead">
+        Get Virus Watch Weekly every Monday — plain-English malware roundups in HTML.
+        Enter your email below to join the list.
+      </p>
+
+      <form id="subscribe-form" novalidate>
+        <div class="form-group">
+          <label for="name">Name <span style="color:var(--text-muted);font-weight:400">(optional)</span></label>
+          <input type="text" id="name" name="name" autocomplete="name" placeholder="Jane Doe" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email <span style="color:var(--danger)">*</span></label>
+          <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com" />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn">Subscribe</button>
+          <button type="button" class="btn btn-secondary" id="unsubscribe-btn">Unsubscribe</button>
+        </div>
+      </form>
+
+      <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+
+      <p class="hint">
+        Tap Subscribe or Unsubscribe and your email app opens with a pre-filled message to
+        <a href="mailto:jbarnes@nexalending.com?subject=SUBSCRIBE">jbarnes@nexalending.com</a>
+        (subject <strong>SUBSCRIBE</strong> or <strong>UNSUBSCRIBE</strong>). Just hit send.
+      </p>
+    </div>
+
+    <footer class="site-footer">
+      <p><a href="index.html">← Back to latest issue</a></p>
+      <p>Virus Watch Weekly · James Barnes, NMLS #215987 · NEXA Lending (NMLS #1660690) · <a href="tel:+15122288124">(512) 228-8124</a></p>
+    </footer>
+  </div>
+  <script src="assets/newsletter.js"></script>
+</body>
+</html>

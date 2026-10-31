@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virus Watch Weekly — Issue 7 (2026-10-26)</title>
+  <meta name="description" content="Newly discovered malware, ransomware, and computer viruses — summarized. Issue 7." />
+  <link rel="canonical" href="https://jbarnes1960.github.io/virus-watch-weekly/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Virus Watch Weekly · NEXA Lending" />
+  <meta property="og:title" content="Virus Watch Weekly — Issue 7: Week of Oct 20 – 26, 2026" />
+  <meta property="og:description" content="Plain-English malware alerts and how to stay safe — LiteLLM, a hugely popular AI developer tool, was published with password-stealing malware inside; FBI and CISA warn businesses about SafePay…" />
+  <meta property="og:url" content="https://jbarnes1960.github.io/virus-watch-weekly/" />
+  <meta property="og:image" content="https://jbarnes1960.github.io/virus-watch-weekly/assets/brand/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Virus Watch Weekly — Issue 7: Week of Oct 20 – 26, 2026" />
+  <meta name="twitter:description" content="Plain-English malware alerts and how to stay safe — LiteLLM, a hugely popular AI developer tool, was published with password-stealing malware inside; FBI and CISA warn businesses about SafePay…" />
+  <meta name="twitter:image" content="https://jbarnes1960.github.io/virus-watch-weekly/assets/brand/og-image.png" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/style-v2.css" />
+</head>
+<body class="v2">
+  <div class="wrap">
+    <header class="site-header">
+      <div class="brand brand-with-logo">
+        <img class="nexa-logo" src="assets/brand/nexa-lending-logo-web.png" alt="NEXA Lending" />
+        <div>
+          <h1>Virus Watch Weekly</h1>
+          <p class="tagline">Newly discovered malware, ransomware, and computer viruses — summarized.</p>
+          <p class="brand-byline">From James Barnes · Senior Loan Officer · NEXA Lending</p>
+        </div>
+      </div>
+      <nav class="nav-links" aria-label="Site">
+        <a href="index.html">Latest</a>
+        <a href="subscribe.html">Subscribe</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div class="hero-meta">
+        <span class="badge badge-issue">Issue 7</span>
+        <span>2026-10-26</span>
+        <span>Week of Oct 20 – 26, 2026</span>
+        <span>6 top stories</span>
+      </div>
+      <h2>This week in malware</h2>
+      <p class="intro">Welcome to Virus Watch Weekly #7. Research for this issue was pulled from public reporting on Monday, Oct 26, 2026 (America/Denver). This week&#x27;s theme: thieves going after your saved logins. A popular AI developer tool was booby-trapped at the source, the FBI and CISA warned businesses about a ransomware gang that walks in through firewalls and backup servers, and fake download sites showing up in search results handed out a password stealer. Plus a new stealer that targets AI assistant accounts, a spy-grade bootkit that slips past Windows Secure Boot, and fake Japanese apps that drain bank accounts on Android.</p>
+    </div>
+
+    <section aria-labelledby="top-stories">
+      <h3 id="top-stories">Top Stories</h3>
+      <p class="stories-hint">Tap any story to open the full details. <span class="stories-controls"></span></p>
+      <div class="stories">
+<details class="story" id="story-1">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>LiteLLM, a hugely popular AI developer tool, was published with password-stealing malware inside</h4>
+      <span class="severity severity-high">High</span>
+    </div>
+    <div class="malware-name">LiteLLM 1.107.0 supply-chain stealer (&quot;privcollect&quot;) + hourly remote-code backdoor</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>LiteLLM is free software that programmers use to connect apps to AI services like ChatGPT and Claude, and it is downloaded tens of millions of times a month. On Oct 21, attackers broke into the project&#x27;s publishing system and released a poisoned version (1.107.0) for about two to three hours. Anyone whose systems pulled that version had their passwords, cloud keys, and browser logins copied and sent to the attackers, and Mac and Linux machines also got a hidden back door. Most people never touch LiteLLM directly, but if your business has developers or uses AI tools built in-house, ask them today whether this version ever ran.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>If your team uses LiteLLM, check whether version 1.107.0 was installed or the Docker &quot;latest&quot; image was pulled on Oct 21. If so, remove it and go back to 1.106.2 or a newer clean release.</li><li>Treat any computer or server that ran 1.107.0 as compromised: take it offline and have it rebuilt rather than just cleaned.</li><li>Change every password, cloud key, and access token that machine could reach, including browser-saved passwords and AI service keys.</li><li>Ask developers to lock software to exact, checked version numbers instead of always grabbing &quot;latest&quot;.</li></ul></div>
+    <p>LiteLLM&#x27;s release pipeline was compromised around 4:00 a.m. PST on Oct 21, 2026, pushing v1.107.0 to PyPI and to Docker Hub/GHCR tags (v1.107.0, latest, main-latest, main-stable). Exposure windows: PyPI 11:39–13:23 UTC; Docker 11:46–14:20 UTC. The source repository was untouched; the wheels added cook.pth, cook.py and sitecustomize.py, so the payload runs at every Python interpreter start even without importing litellm. cook.py (&#x27;privcollect&#x27;) harvests browser passwords/cookies, SSH/GPG/TLS keys, AWS/Azure/GCP and Kubernetes/Docker/Vault/CI secrets, AI tool configs (~/.cursor, ~/.claude, Windsurf, etc.) and env vars, RSA-encrypts them and POSTs to litellm[.]dev/healthcheck. On Linux/macOS, sitecustomize.py daemonizes and hourly fetches a C2 domain from a GitHub dead drop (letters9813) and executes /codepy. LiteLLM suspects a GitHub token leaked in AI gateway logs; Microsoft, Aikido, Socket and JFrog published analyses. Releases 1.106.2 and 1.107.0rc1/rc2 are not affected; enterprise private builds were not impacted.</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Windows, macOS, Linux (Python environments and Docker containers)</div>
+      <div><strong>How it spreads:</strong> Supply chain: poisoned official PyPI package and Docker images</div>
+    </div>
+    <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/litellm-release-pipeline-hacked-to-distribute-info-stealer-malware/" rel="noopener noreferrer" target="_blank">BleepingComputer; The Hacker News; Microsoft Security Blog; LiteLLM incident notice</a></div>
+  </div>
+</details>
+<details class="story" id="story-2">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>FBI and CISA warn businesses about SafePay ransomware</h4>
+      <span class="severity severity-high">High</span>
+    </div>
+    <div class="malware-name">SafePay ransomware (#StopRansomware advisory AA26-293A)</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>SafePay is a criminal gang that locks up a company&#x27;s files and demands a cryptocurrency ransom. On Oct 20 the U.S. government&#x27;s cyber defense agency (CISA) and partners published a warning because the group has been very active since 2024 against businesses across North America and beyond. They usually get in by guessing or stealing passwords, through phishing emails, or through unpatched firewalls and backup servers, then quietly turn off security tools before locking everything. Small offices are exactly the kind of target this advice is meant for.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>Update your office firewall and VPN (especially Cisco ASA or SonicWall) and any Veeam backup server. These are the exact products the advisory names.</li><li>Turn on multi-factor authentication (a code or app prompt on top of the password) for VPN, email, and remote access.</li><li>Use long, unique passwords and remove old or unused accounts. The gang often just guesses or reuses passwords.</li><li>Keep at least one backup copy offline or unreachable from your network, and test that you can actually restore from it.</li><li>If you see a ransom note, unplug affected machines from the network and report it at stopransomware.gov or to your local FBI field office.</li></ul></div>
+    <p>CISA&#x27;s joint #StopRansomware advisory AA26-293A (Oct 20, 2026) details SafePay, active since August 2024 against businesses and critical infrastructure in North America, South America, Europe and Australia. Initial access: stolen or brute-forced credentials, phishing, and exploitation of edge and backup systems, with listed CVEs CVE-2020-3259 and CVE-2023-20269 (Cisco ASA/FTD), CVE-2023-27532 and CVE-2024-40711 (Veeam Backup &amp; Replication), and CVE-2024-40766 (SonicWall SonicOS). Post-compromise the actors create or hijack accounts, use legitimate admin tools (living off the land) for lateral movement and discovery, disable security protections, then encrypt and leave a crypto-ransom note. Key actions: patch firewalls/edge devices, enforce MFA, restrict admin tools and privileges, and apply zero-trust principles. STIX IOCs are provided.</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Windows networks; Cisco ASA, SonicWall firewalls; Veeam backup servers</div>
+      <div><strong>How it spreads:</strong> Stolen/guessed passwords, phishing, unpatched firewalls and backup servers</div>
+    </div>
+    <div class="story-source">Source: <a href="https://www.cisa.gov/news-events/cybersecurity-advisories/aa26-293a" rel="noopener noreferrer" target="_blank">CISA #StopRansomware advisory AA26-293A</a></div>
+  </div>
+</details>
+<details class="story" id="story-3">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>Fake Chocolatey and Windows activation sites in search results handed out the Armorsteal stealer</h4>
+      <span class="severity severity-high">High</span>
+    </div>
+    <div class="malware-name">Armorsteal (Python RAT, keylogger and infostealer)</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals built lookalike copies of two websites people search for when setting up Windows PCs: Chocolatey, a free tool for installing programs, and a popular Windows activation script site. The fake sites showed up in search results and told visitors to paste an install command into PowerShell (a Windows command window). That command quietly installed Armorsteal, which records keystrokes, swaps crypto wallet addresses you copy, and steals passwords, Discord and Steam logins, and crypto wallets, while still installing the real program so nothing looked wrong. Always type the address of official download sites yourself instead of trusting a search result.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>Get Chocolatey only from chocolatey.org (note the spelling) and type the address yourself rather than clicking a search ad or result.</li><li>Never paste a command into PowerShell, Command Prompt, or Run because a website told you to, unless your IT person confirms it.</li><li>Avoid unofficial Windows activation tools; use a properly licensed copy of Windows instead.</li><li>Ask IT to check for a folder named C:\Windows\SystemHealth\Update or scheduled tasks named SysCheck2 or SysCheckX. Either is a sign of this infection.</li><li>If infected, change your passwords from a different, clean device and move any crypto to a new wallet.</li></ul></div>
+    <p>Zscaler ThreatLabz (Oct 22, 2026) describes an SEO-poisoning campaign identified in September 2026 using lookalike domains choclatey[.]org (Chocolatey) and massgravel[.]net (Microsoft Activation Scripts/Massgrave). The lure&#x27;s install.ps1 requests elevation, hides the PowerShell window, downloads a ZIP to C:\Windows\SystemHealth\Update\, runs the legitimate Chocolatey installer as cover, and unpacks a Python 3.11 runtime with Pyarmor-protected scripts. Armorsteal combines a signed-task remote-access module (runs only operator-signed tasks), keylogger/clipboard hijacker, and a stealer for Discord tokens, browser data, crypto wallets, SSH keys, Steam sessions and password managers. Persistence via SysCheck2/SysCheckX scheduled tasks. C2 workerstats[.]net with standby domains; lure sites were taken down Sep 25 and Oct 1, but operators moved to new infrastructure in early October.</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Windows</div>
+      <div><strong>How it spreads:</strong> Poisoned search results leading to lookalike download sites and a pasted PowerShell command</div>
+    </div>
+    <div class="story-source">Source: <a href="https://www.zscaler.com/blogs/security-research/seo-poisoning-campaign-delivers-new-armorsteal-malware" rel="noopener noreferrer" target="_blank">Zscaler ThreatLabz</a></div>
+  </div>
+</details>
+<details class="story" id="story-4">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>Aokigahara: a new password stealer that also grabs your AI assistant accounts</h4>
+      <span class="severity severity-med">Med</span>
+    </div>
+    <div class="malware-name">Aokigahara / Aoki infostealer (possibly earlier Kamidere or Stygian)</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Aokigahara is a new Windows program that steals saved information from an infected PC: browser passwords, crypto wallets, email and VPN logins, and password manager data. What&#x27;s new is that it also hunts for the sign-in files of AI tools like ChatGPT Desktop, Claude, Cursor, GitHub Copilot, and Gemini, so criminals can use or resell someone&#x27;s paid AI account and peek at their private chats. It doesn&#x27;t break into those AI products; it just copies what&#x27;s already stored on the PC. Researchers haven&#x27;t said exactly how it spreads, so the usual rules apply: install software only from official sources and be wary of unexpected downloads.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>Turn on multi-factor authentication for your AI accounts (ChatGPT, Claude, Copilot, Gemini) as well as email and banking.</li><li>Install apps only from official sites or app stores, and skip cracked or &quot;free premium&quot; software.</li><li>If a PC may be infected, sign out of all sessions on your AI and email accounts from a clean device and change those passwords.</li><li>Developers should rotate API keys, SSH keys, and cloud credentials stored on any machine that might be affected.</li></ul></div>
+    <p>Check Point Research (Oct 23, 2026) and Symantec/Carbon Black (reported Oct 21) describe Aokigahara (Aoki), a Windows infostealer observed in the wild, possibly an evolution of Kamidere/Stygian. Beyond browsers (41), desktop and extension crypto wallets, VPN, FTP/SFTP, email and password managers, a dedicated &#x27;aisessions&#x27; handler collects auth/session/config files for Claude Code and Desktop, ChatGPT Desktop, Codex, Cursor, Windsurf/Codeium, GitHub Copilot, Gemini CLI, JetBrains AI Assistant, Amazon Q and Kiro, plus Git credentials, SSH keys, AWS/Azure/GCP credential files and SSO caches, and queries Windows Credential Manager. No vulnerability in the AI products is exploited. Initial delivery vector unspecified; unattributed and financially motivated.</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Windows</div>
+      <div><strong>How it spreads:</strong> Not yet specified by researchers (standalone Windows stealer binaries)</div>
+    </div>
+    <div class="story-source">Source: <a href="https://research.checkpoint.com/2026/infostealer-riding-the-ai-train/" rel="noopener noreferrer" target="_blank">Check Point Research</a></div>
+  </div>
+</details>
+<details class="story" id="story-5">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>BlackX: a spy-grade bootkit that sneaks past Windows Secure Boot</h4>
+      <span class="severity severity-med">Med</span>
+    </div>
+    <div class="malware-name">BlackX UEFI bootkit (APT41-linked, Baton Drop CVE-2022-21894)</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>A bootkit is malware that loads before Windows itself starts, so it can switch off antivirus and hide from it. Kaspersky found BlackX being used by a Chinese state-linked spy group against government offices in Central Asia, and it worked even on fully updated PCs. The reason is that Microsoft&#x27;s old fix for the flaw it uses requires an extra manual step that almost nobody takes. Ordinary home users aren&#x27;t the target here, but businesses should ask their IT provider whether that extra Secure Boot step has been done.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>Keep Windows updates turned on, but know that updates alone don&#x27;t fully close this hole.</li><li>Ask your IT provider to complete Microsoft&#x27;s manual Secure Boot revocation steps for the Baton Drop flaw (CVE-2022-21894) on business PCs.</li><li>Keep Secure Boot turned on in each PC&#x27;s settings, and don&#x27;t disable it to run unofficial tools.</li><li>Organizations that handle sensitive government or diplomatic work should have IT check for the warning signs Kaspersky published.</li></ul></div>
+    <p>Kaspersky (via BleepingComputer, Oct 24, 2026) analyzed BlackX, a UEFI bootkit used in early 2026 espionage against diplomatic agencies in Tajikistan, Uzbekistan and Turkmenistan, attributed with medium confidence to APT41 (Brass Typhoon). It reuses a BlackLotus-like exploit of Baton Drop (CVE-2022-21894) to enroll attacker Machine Owner Keys and load arbitrary EFI files, bypassing Secure Boot. It drops a kernel driver signed with a revoked certificate that disables security processes and registry callbacks, tampers with ETW, protects its files (opening them launches Calculator), and deploys a RAT using Google Drive/OneDrive/Yandex.Disk for C2 plus OxiDLLRunner (sideloaded by googleupdate.exe). All victims were fully patched; the Baton Drop mitigation requires manually revoking the &#x27;Windows Production PCA 2011&#x27; certificate, and that certificate&#x27;s Oct 19, 2026 expiration does not block vulnerable binaries unless it is added to the blocklist (DBX).</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Windows (UEFI firmware / boot process)</div>
+      <div><strong>How it spreads:</strong> Targeted espionage by a state-linked group; requires prior access to the machine</div>
+    </div>
+    <div class="story-source">Source: <a href="https://www.bleepingcomputer.com/news/security/blackx-uefi-bootkit-exploits-baton-drop-flaw-to-bypass-secure-boot/" rel="noopener noreferrer" target="_blank">BleepingComputer (Kaspersky research)</a></div>
+  </div>
+</details>
+<details class="story" id="story-6">
+  <summary class="story-summary">
+    <div class="story-header">
+      <h4>Black Hawk: fake Japanese tax and shopping apps hijack Android phones to drain bank accounts</h4>
+      <span class="severity severity-med">Med</span>
+    </div>
+    <div class="malware-name">Black Hawk / Eagle Android RAT</div>
+    <span class="story-toggle"><span class="t-closed">Tap to read the full story</span><span class="t-open">Tap to close</span></span>
+  </summary>
+  <div class="story-body">
+    <div class="plain-english"><div class="plain-english-label">In plain English</div><p>Criminals are passing around fake Android apps that pretend to be Japanese tax services, shopping sites, messaging apps, and investment offers. Once installed, the app quietly unpacks a hidden remote-control program that records how you unlock your phone, watches your screen, and uses the banking app on your behalf to move money without you noticing. The campaign targets Japan, but the trick of a fake official app works anywhere. Only install apps from Google Play, and never from a link in a text or social media ad.</p></div>
+    <div class="stay-safe"><div class="stay-safe-label">&#128737; How to stay safe</div><ul><li>Install apps only from Google Play, and leave the &quot;install unknown apps&quot; setting turned off.</li><li>Be suspicious of any text, email, or ad that asks you to download a tax, refund, or investment app.</li><li>If an app asks for Accessibility or screen-sharing permissions it doesn&#x27;t need, deny it and uninstall the app.</li><li>Turn on transaction alerts with your bank, and call the number on your card right away if you see a transfer you didn&#x27;t make.</li></ul></div>
+    <p>Symantec&#x27;s Oct 23, 2026 protection bulletin summarizes STAR Labs research on a financially motivated Android campaign using lightweight, packed dropper apps impersonating Japanese tax services, retail platforms, messaging apps and fake investment schemes. The dropper decrypts and silently installs a WebSocket-based RAT managed from panels branded Black Hawk or Eagle. The RAT captures device unlock methods (PIN/pattern), intercepts financial data, and streams the screen, letting operators manipulate banking apps to perform fraudulent transactions without alerting the user.</p>
+    <div class="story-meta">
+      <div><strong>Platforms:</strong> Android</div>
+      <div><strong>How it spreads:</strong> Fake apps outside official stores, disguised as Japanese government, retail and investment apps</div>
+    </div>
+    <div class="story-source">Source: <a href="https://www.broadcom.com/support/security-center/protection-bulletin/fake-japanese-apps-deliver-black-hawk-android-rat" rel="noopener noreferrer" target="_blank">Broadcom Symantec protection bulletin (STAR Labs research)</a></div>
+  </div>
+</details>
+      </div>
+    </section>
+
+    <section aria-labelledby="quick-hits">
+      <h3 id="quick-hits">Quick Hits</h3>
+      <div class="quick-hits-box">
+        <ul class="quick-hits">
+<li>Eclipse ransomware (Atos, Oct 19): researchers found the gang&#x27;s own server left open on the internet, revealing its full toolkit and active attacks on seven organizations in five countries. A rare look inside a ransomware operation that only started in August.</li>
+<li>The Gentlemen ransomware (Acronis, Oct 21): one of this year&#x27;s busiest ransomware groups claims more than 800 victims, many in the U.S. and Europe, and uses tools that switch off security software before locking files.</li>
+<li>Rust-based stealer in pirated software (AhnLab ASEC, via IntelFusions, Oct 21): a new password thief hides in cracked program downloads and quits if it thinks researchers are watching. Another reason to skip pirated software.</li>
+<li>Heartbreaker macOS ransomware (Patrick Wardle, via SecurityWeek, Oct 23): an odd Mac ransomware that tries to rebuild itself to dodge antivirus. Its single built-in key means files can be recovered for free, so it isn&#x27;t a big threat yet.</li>
+<li>OpenCode AI coding tool flaw (Pillar Security, via The Hacker News, Oct 22): a critical bug on Windows let a malicious add-on server run code during sign-in. Developers should update to version 1.18.33 or later.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="sources">
+      <h3 id="sources">Sources</h3>
+      <div class="sources-note">Primary sources this week: BleepingComputer, The Hacker News, Microsoft Security Blog and LiteLLM&#x27;s own incident notice on the LiteLLM 1.107.0 compromise (Oct 21–23); CISA #StopRansomware advisory AA26-293A on SafePay (Oct 20); Zscaler ThreatLabz on Armorsteal (Oct 22); Check Point Research and Symantec/Carbon Black on Aokigahara (Oct 21–23); Kaspersky&#x27;s BlackX research via BleepingComputer (Oct 24); Broadcom Symantec protection bulletin on STAR Labs&#x27; Black Hawk research (Oct 23). Quick hits from Atos Threat Research Center, Acronis TRU, AhnLab ASEC via IntelFusions, SecurityWeek&#x27;s weekly roundup, and Pillar Security via The Hacker News. New sources scouted this week: Atos Threat Research Center, Acronis TRU, Broadcom&#x27;s Symantec protection bulletins, Cynet CyOps, and IntelFusions. Skipped items already covered in earlier issues (ICMacOS, Midnight Mimosa, Hirudo, AvisLoader, PoeLLM) and items without primary reporting.</div>
+    </section>
+
+    <section class="subscribe-box" id="subscribe" aria-labelledby="subscribe-heading">
+      <div class="subscribe-box-inner">
+        <h3 id="subscribe-heading">Subscribe to Virus Watch Weekly</h3>
+        <p class="subscribe-lead">Get plain-English malware roundups every Monday. Free — just enter your email.</p>
+        <form id="subscribe-form" class="subscribe-form" novalidate>
+          <div class="subscribe-fields">
+            <div class="form-group">
+              <label for="sub-name">Name <span class="optional">(optional)</span></label>
+              <input type="text" id="sub-name" name="name" autocomplete="name" placeholder="Jane Doe" />
+            </div>
+            <div class="form-group">
+              <label for="sub-email">Email <span class="required">*</span></label>
+              <input type="email" id="sub-email" name="email" required autocomplete="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn">Subscribe</button>
+            <a class="btn btn-secondary" href="subscribe.html">Manage subscription</a>
+          </div>
+        </form>
+        <div id="form-message" class="msg" role="status" aria-live="polite"></div>
+        <p class="subscribe-hint">Or email <a href="mailto:jbarnes@nexalending.com?subject=SUBSCRIBE">jbarnes@nexalending.com</a> with the subject <strong>SUBSCRIBE</strong>.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="archive">
+      <h3 id="archive">Archive</h3>
+      <ul class="archive-list">
+<li><a href="issues/2026-10-26.html">2026-10-26</a> ← current</li>
+<li><a href="issues/2026-10-19.html">2026-10-19</a></li>
+<li><a href="issues/2026-10-12.html">2026-10-12</a></li>
+<li><a href="issues/2026-10-05.html">2026-10-05</a></li>
+<li><a href="issues/2026-09-28.html">2026-09-28</a></li>
+<li><a href="issues/2026-09-21.html">2026-09-21</a></li>
+<li><a href="issues/2026-09-18.html">2026-09-18</a></li>
+      </ul>
+    </section>
+
+    <footer class="site-footer">
+      <p>Virus Watch Weekly · Issue 7 · 2026-10-26</p>
+      <p>
+        <a href="subscribe.html">Subscribe</a>
+        ·
+        <a href="subscribe.html?action=unsubscribe">Unsubscribe</a>
+        ·
+        <a href="index.html">Latest issue</a>
+      </p>
+      <div class="author-card">
+        <img class="author-photo" src="assets/brand/james-barnes.jpg" alt="James Barnes" width="72" height="72" />
+        <div class="author-info">
+          <strong>James Barnes</strong>
+          <div>Senior Loan Officer · NEXA Lending LLC</div>
+          <div>NMLS #215987 · Company NMLS #1660690</div>
+          <div><a href="tel:+15122288124">(512) 228-8124</a> · <a href="mailto:jbarnes@nexalending.com">jbarnes@nexalending.com</a></div>
+          <div><a href="https://www.nexalending.com" rel="noopener" target="_blank">NEXALending.com</a> · Licensed in AR, CO, TX</div>
+          <div class="author-disclaimer">Equal Housing Lender · Research summaries only — not formal threat intel.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script src="assets/newsletter.js"></script>
+</body>
+</html>
